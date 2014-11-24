@@ -1,43 +1,51 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
+import csv
+import json 
 import sqlite3 as lite
 import sys
 
-con = None
+def create_connection(db_name):
+    con = lite.connect('../database/' + db_name '.db')
+    return con
 
-try:
-    #este eh o do problema2, funciona
-    con = lite.connect('/home/tales/development/Git/ad2/ad2-p2/data/AdditionalFiles/subset_artist_term.db')
-    cur = con.cursor()
+def state_location_by_artist_id(artist_id):
+    try:
+        cnxn = create_connection()
+        cursor = cnxn.cursor()
+        query = "SELECT id, state FROM usa_artist_state_location WHERE id =" + id + ";"
+        print query
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        cnxn.close()
+        lista_tuplas = []
+        for tupla in rows:
+           lista_tuplas.append(tupla)
+        col = ["artist_id", "state"]
+        response = montaJson(lista_tuplas, col)
+        return json.dumps(response).encode("utf-8")
 
-    #lista as tabelas
-    tableListQuery = "select name from sqlite_master where type = 'table'"
-    print "TABELAS"
-    cur.execute(tableListQuery)
-    data = cur.fetchall()
-    print data
+def artist_id_by_state_location(state):
+    try:
+        cnxn = create_connection()
+        cursor = cnxn.cursor()
+        query = "SELECT id, state FROM usa_artist_state_location WHERE state =" + state + ";"
+        print query
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        cnxn.close()
+        lista_tuplas = []
+        for tupla in rows:
+           lista_tuplas.append(tupla)
+        col = ["artist_id", "state"]
+        response = montaJson(lista_tuplas, col)
+        return json.dumps(response).encode("utf-8")
     
-    print
+    except lite.Error, e:
+        return "Error %s:" % e.args[0]
 
-    #este eh o do problema3, nao funciona, esta ecrypted
-    con = lite.connect('/home/tales/development/Git/api-rest-mel-na-chupeta/database/db.trace.db')
-    cur = con.cursor()
-
-    #lista as tabelas
-    tableListQuery = "select name from sqlite_master where type = 'table'"
-    print "TABELAS"
-    cur.execute(tableListQuery)
-    data = cur.fetchall()
-    print data
-   
-
-except lite.Error, e:
-    
-    print "Error %s:" % e.args[0]
-    sys.exit(1)
-    
-finally:
-    
-    if con:
-        con.close()
+    finally:
+        if con:
+            con.close()
