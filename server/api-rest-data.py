@@ -7,20 +7,30 @@ import sys
 con = None
 
 try:
-    con = lite.connect('database/db.h2.db')
-    
+    #este eh o do problema2, funciona
+    con = lite.connect('/home/tales/development/Git/ad2/ad2-p2/data/AdditionalFiles/subset_artist_term.db')
     cur = con.cursor()
-    cur.execute('SELECT SQLITE_VERSION()')
-    
-    data = cur.fetchone()
-    
-    print "SQLite version: %s" % data
 
-    print "----"
-    tableListQuery = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY Name"
+    #lista as tabelas
+    tableListQuery = "select name from sqlite_master where type = 'table'"
+    print "TABELAS"
     cur.execute(tableListQuery)
-    tables = map(lambda t: t[0], cur.fetchall())
-    print "----"
+    data = cur.fetchall()
+    print data
+    
+    print
+
+    #este eh o do problema3, nao funciona, esta ecrypted
+    con = lite.connect('/home/tales/development/Git/api-rest-mel-na-chupeta/database/db.trace.db')
+    cur = con.cursor()
+
+    #lista as tabelas
+    tableListQuery = "select name from sqlite_master where type = 'table'"
+    print "TABELAS"
+    cur.execute(tableListQuery)
+    data = cur.fetchall()
+    print data
+   
 
 except lite.Error, e:
     
