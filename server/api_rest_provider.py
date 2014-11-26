@@ -16,6 +16,14 @@ def tags_by_states():
     response.headers['Access-Control-Allow-Origin'] = "*"
     return response
 
+@app.route('/tags_by_state_name', methods=['GET'])
+def tags_by_states_name():
+    state_name = request.args['state_name']
+    response = api_rest_data.tags_by_state_name(state_name)
+    response = make_response(response)
+    response.headers['Access-Control-Allow-Origin'] = "*"
+    return response
+
 @app.route('/states_by_tag', methods=['GET'])
 def states_by_tag():
     tag = request.args['tag']

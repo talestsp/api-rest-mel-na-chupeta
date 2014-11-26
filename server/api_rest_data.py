@@ -46,6 +46,41 @@ def tags_by_state(state):
         
         return json.dumps(Counter(ocorrencias))
 
+def tags_by_state_name(state_name):
+        path = os.path.dirname(os.path.realpath(__file__)).split("/")
+        path = "/".join(path[:-1])
+        
+        state_names_arq = open("../database/usa_artist_state_location.csv")
+        artist_mbtag_arq = open("../database/artist_mbtag.csv")
+        
+        ocorrencias = []
+
+        #dispensa o cabeçalho
+        state_names_arq.readline()
+        artist_mbtag_arq.readline()
+        
+        state_lines = state_names_arq.readlines()
+        artist_lines = artist_mbtag_arq.readlines()
+
+        artista_do_state = []
+
+        for linha in state_lines: 
+            if(linha.split(",")[3].replace("\n", "") == state_name.replace("'","")):
+                #print linha.split(",")[3].replace("\n", ""), state_name.replace("'","")
+                artista_do_state.append(linha.split(",")[0])
+        
+        print artista_do_state
+
+        for linha in artist_lines:
+            #print linha.split(",")[0]
+            if(linha.split(",")[0] in artista_do_state):
+                ocorrencias.append(linha.split(",")[1].replace("\n", ""))
+                #print linha.split(",")[3].replace("\n", "")
+
+        query_json = []
+        
+        return json.dumps(Counter(ocorrencias))
+
 def states_by_tag(tag):
         path = os.path.dirname(os.path.realpath(__file__)).split("/")
         path = "/".join(path[:-1])
