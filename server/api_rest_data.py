@@ -43,11 +43,6 @@ def tags_by_state(state):
                 print linha.split(",")[1].replace("\n", "")
 
         query_json = []
-
-        
-
-        for i in ocorrencias.keys():
-
         
         return json.dumps(Counter(ocorrencias))
 
