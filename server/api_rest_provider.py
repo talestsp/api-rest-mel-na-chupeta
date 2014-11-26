@@ -18,10 +18,11 @@ def tags_by_states():
 
 @app.route('/states_by_tag', methods=['GET'])
 def states_by_tag():
-    state = request.args['state']
-    response = api_rest_data.states_by_tag(state)
+    tag = request.args['tag']
+    response = api_rest_data.states_by_tag(tag)
     response = make_response(response)
-    response.headers['Access
+    response.headers['Access-Control-Allow-Origin'] = "*"
+    return response
 
 @app.route('/artist_id_by_state_location', methods=['GET'])
 def artist_id_by_state_location_csv():

@@ -46,6 +46,39 @@ def tags_by_state(state):
         
         return json.dumps(Counter(ocorrencias))
 
+def states_by_tag(tag):
+        path = os.path.dirname(os.path.realpath(__file__)).split("/")
+        path = "/".join(path[:-1])
+        
+        "artist_mbtag, sigla"
+        state_siglas_arq = open("../database/state_siglas.csv")
+        "artist_id, mbtag"
+        artist_mbtag_arq = open("../database/artist_mbtag.csv")
+        
+        ocorrencias = []
+
+        #dispensa o cabeçalho
+        state_siglas_arq.readline()
+        artist_mbtag_arq.readline()
+        
+        state_lines = state_siglas_arq.readlines()
+        artist_lines = artist_mbtag_arq.readlines()
+
+        artista_da_tag = []
+
+        for linha in artist_lines:
+            linha_limpa = linha.split(",")[1].replace("\n", "")
+            if(linha_limpa[1:len(linha_limpa)] == tag.replace("'","")):
+                artista_da_tag.append(linha.split(",")[0])
+        
+        for linha in state_lines:
+            if(linha.split(",")[0] in artista_da_tag):
+                ocorrencias.append(linha.split(",")[1].replace("\n", ""))
+
+        query_json = []
+        
+        return json.dumps(Counter(ocorrencias))
+
 #enquanto o bd nao funciona, csv :)
 def artist_id_by_state_location_csv(state):
     try:
